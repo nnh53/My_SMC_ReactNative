@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, TouchableOpacity, ScrollView, Modal, Alert, TextInput } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import fetchAccountData from '../components/fetchAccountData'; //
 import { useIsFocused } from '@react-navigation/native';
 interface Member {
     studentName: string;
@@ -152,7 +151,7 @@ const updateMemberRole = async (member: Member, userToken: string) => {
         });
 
         const responseText = await response.text();
-        console.log('Server Response:', responseText);
+        // console.log('Server Response:', responseText);
 
         if (!response.ok) {
             throw new Error('Failed to update member role');
@@ -183,7 +182,9 @@ const MyTeamScreen = () => {
     const { courseDetails, studentCode } = useLocalSearchParams();
     const [newRole, setNewRole] = useState<string>('');
     const [joinRequestsCount, setJoinRequestsCount] = useState<number>(0);
-
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+    const [showAssignConfirm, setShowAssignConfirm] = useState(false);
+    const [showUnassignConfirm, setShowUnassignConfirm] = useState(false);
     const refreshTeamDetails = async (token: string) => {
         try {
             const parsedCourseDetails = JSON.parse(courseDetails as string);
@@ -241,9 +242,10 @@ const MyTeamScreen = () => {
             }
         };
         loadTeamDetails();
-    }, [courseDetails, studentCode,isFocused]);
+    }, [courseDetails, studentCode, isFocused]);
 
     const handleDeleteMember = async () => {
+        setShowDeleteConfirm(false);
         if (selectedMember) {
             try {
                 const token = await AsyncStorage.getItem('@userToken');
@@ -260,6 +262,7 @@ const MyTeamScreen = () => {
     };
 
     const handleAssignLeader = async () => {
+        setShowAssignConfirm(false);
         if (selectedMember) {
             try {
                 const token = await AsyncStorage.getItem('@userToken');
@@ -275,6 +278,7 @@ const MyTeamScreen = () => {
         setModalVisible(false);
     };
     const handleUnAssignLeader = async () => {
+        setShowUnassignConfirm(false);
         if (selectedMember) {
             try {
                 const token = await AsyncStorage.getItem('@userToken');
@@ -346,7 +350,7 @@ const MyTeamScreen = () => {
                 if (teamDetails.data.teamId) {
                     const joinRequests = await fetchJoinRequests(teamDetails.data.teamId, token);
                     const filteredJoinRequests = joinRequests.filter((request: JoinRequest) => request.type === "Join" && request.status === 0);
-    
+
                     router.push({
                         pathname: './RequestListScreen',
                         params: {
@@ -360,8 +364,8 @@ const MyTeamScreen = () => {
             Alert.alert('Error', 'Failed to retrieve join requests');
         }
     };
-    
-    
+
+
 
     if (loading) {
         return (
@@ -436,16 +440,16 @@ const MyTeamScreen = () => {
                             </>
                         ) : (
                             <>
-                                <TouchableOpacity style={styles.modalOption} onPress={handleDeleteMember}>
+                                <TouchableOpacity style={styles.modalOption} onPress={() => { setModalVisible(false); setShowDeleteConfirm(true); }}>
                                     <Text style={styles.modalOptionText}>Delete Member</Text>
                                 </TouchableOpacity>
                                 {!selectedMember?.isLeader && (
-                                    <TouchableOpacity style={[styles.modalOption]} onPress={handleAssignLeader}>
+                                    <TouchableOpacity style={[styles.modalOption]} onPress={() => { setModalVisible(false); setShowAssignConfirm(true); }}>
                                         <Text style={styles.modalOptionText}>Assign Leader</Text>
                                     </TouchableOpacity>
                                 )}
                                 {selectedMember?.isLeader && (
-                                    <TouchableOpacity style={[styles.modalOption]} onPress={handleUnAssignLeader}>
+                                    <TouchableOpacity style={[styles.modalOption]} onPress={() => { setModalVisible(false); setShowUnassignConfirm(true); }}>
                                         <Text style={styles.modalOptionText}>Unassign Leader</Text>
                                     </TouchableOpacity>
                                 )}
@@ -459,8 +463,58 @@ const MyTeamScreen = () => {
                         )}
                     </View>
                 </View>
-
             </Modal>
+
+            {/* Delete Confirmation Popup */}
+            {showDeleteConfirm && (
+                <View style={styles.popupContainer}>
+                    <View style={styles.popupContent}>
+                        <Text>Do you really want to delete this member?</Text>
+                        <View style={styles.modalButtonContainer}>
+                            <TouchableOpacity style={styles.confirmButton} onPress={handleDeleteMember}>
+                                <Text style={styles.confirmButtonText}>Yes</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.cancelButton} onPress={() => setShowDeleteConfirm(false)}>
+                                <Text style={styles.cancelButtonText}>No</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+            )}
+
+            {/* Assign Leader Confirmation Popup */}
+            {showAssignConfirm && (
+                <View style={styles.popupContainer}>
+                    <View style={styles.popupContent}>
+                        <Text>Do you want to assign this member as the leader?</Text>
+                        <View style={styles.modalButtonContainer}>
+                            <TouchableOpacity style={styles.confirmButton} onPress={handleAssignLeader}>
+                                <Text style={styles.confirmButtonText}>Yes</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.cancelButton} onPress={() => setShowAssignConfirm(false)}>
+                                <Text style={styles.cancelButtonText}>No</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+            )}
+
+            {/* Unassign Leader Confirmation Popup */}
+            {showUnassignConfirm && (
+                <View style={styles.popupContainer}>
+                    <View style={styles.popupContent}>
+                        <Text>Do you want to unassign this member as the leader?</Text>
+                        <View style={styles.modalButtonContainer}>
+                            <TouchableOpacity style={styles.confirmButton} onPress={handleUnAssignLeader}>
+                                <Text style={styles.confirmButtonText}>Yes</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.cancelButton} onPress={() => setShowUnassignConfirm(false)}>
+                                <Text style={styles.cancelButtonText}>No</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+            )}
         </View>
     );
 };
@@ -577,7 +631,7 @@ const styles = StyleSheet.create({
     },
     modalOptionText: {
         fontSize: 18,
-        color: '#fff',
+        color: '#000000',
     },
     modalCloseButton: {
         padding: 10,
@@ -588,12 +642,9 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#000',
     },
-    cancelButton: {
-        backgroundColor: '#999',
-    },
     modalCloseButtonText: {
         fontSize: 18,
-        color: '#fff',
+        color: '#FF0000',
     },
     input: {
         height: 40,
@@ -636,6 +687,59 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: '#fff',
         fontWeight: 'bold',
+    },modalButtonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: 20,
+        width: '100%',
+    },
+    confirmButton: {
+        backgroundColor: '#00796b',
+        padding: 10,
+        borderRadius: 5,
+        flex: 1,
+        marginRight: 10,
+        alignItems: 'center',
+    },
+    confirmButtonText: {
+        color: '#fff',
+        fontWeight: 'bold',
+    },
+    cancelButton: {
+        backgroundColor: '#d9534f',
+        padding: 10,
+        borderRadius: 5,
+        flex: 1,
+        marginLeft: 10,
+        alignItems: 'center',
+    },
+    cancelButtonText: {
+        color: '#fff',
+        fontWeight: 'bold',
+    },
+    // Added popup styles
+    popupContainer: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0,0,0,0.5)',
+    },
+    popupContent: {
+        width: '80%',
+        backgroundColor: '#fff',
+        padding: 20,
+        borderRadius: 10,
+        alignItems: 'center',
+    },
+    popupButtonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: 20,
+        width: '100%',
     },
 });
 export default MyTeamScreen;

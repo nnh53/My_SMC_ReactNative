@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView, ActivityIndicator, Alert } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView, ActivityIndicator, Alert,Modal } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import getToken from '../../components/Jwt/getToken';
 
@@ -33,8 +33,7 @@ const EventDetailScreen = () => {
     const [loading, setLoading] = useState(true);
     const [userId, setUserId] = useState<string | null>(null);
     const [studentId, setStudentId] = useState<string | null>(null);
-
-    
+    const [confirmVisible, setConfirmVisible] = useState(false);
     useEffect(() => {
         if (id) {
             fetchEventDetails(id.toString());
@@ -87,6 +86,7 @@ const EventDetailScreen = () => {
     };
 
     const handleRegister = async () => {
+         setConfirmVisible(false);
         if (!id || !studentId || !userId) return;
 
         try {
@@ -251,15 +251,38 @@ const EventDetailScreen = () => {
                         <Text style={styles.eventFullDescription}>{event.description}</Text>
                         <Text style={styles.eventTag}>{event.tag}</Text>
                         <Text style={styles.eventRegistered}>Registered: {event.registeredAmount}</Text>
-                        <TouchableOpacity style={styles.registrationButton} onPress={handleRegister}>
+                        <TouchableOpacity style={styles.registrationButton} onPress={() => setConfirmVisible(true)}>
                             <Text style={styles.registrationButtonText}>Register Now</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
             </ScrollView>
+
+            {/* Confirmation Popup */}
+            <Modal
+                transparent={true}
+                visible={confirmVisible}
+                animationType="slide"
+                onRequestClose={() => setConfirmVisible(false)}
+            >
+                <View style={styles.popupContainer}>
+                    <View style={styles.popupContent}>
+                        <Text>Are you sure you want to register for this event?</Text>
+                        <View style={styles.popupButtonContainer}>
+                            <TouchableOpacity style={styles.confirmButton} onPress={handleRegister}>
+                                <Text style={styles.confirmButtonText}>Yes</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.cancelButton} onPress={() => setConfirmVisible(false)}>
+                                <Text style={styles.cancelButtonText}>No</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
         </View>
     );
 };
+
 
 const styles = StyleSheet.create({
     container: {
@@ -355,6 +378,53 @@ const styles = StyleSheet.create({
         color: 'red',
         textAlign: 'center',
         marginTop: 20,
+    },
+    confirmButton: {
+        backgroundColor: '#00796b',
+        padding: 10,
+        borderRadius: 5,
+        flex: 1,
+        marginRight: 10,
+        alignItems: 'center',
+    },
+    confirmButtonText: {
+        color: '#fff',
+        fontWeight: 'bold',
+    },
+    cancelButton: {
+        backgroundColor: '#d9534f',
+        padding: 10,
+        borderRadius: 5,
+        flex: 1,
+        marginLeft: 10,
+        alignItems: 'center',
+    },
+    cancelButtonText: {
+        color: '#fff',
+        fontWeight: 'bold',
+    },
+    popupContainer: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0,0,0,0.5)',
+    },
+    popupContent: {
+        width: '80%',
+        backgroundColor: '#fff',
+        padding: 20,
+        borderRadius: 10,
+        alignItems: 'center',
+    },
+    popupButtonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: 20,
+        width: '100%',
     },
 });
 

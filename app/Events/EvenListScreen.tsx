@@ -118,7 +118,7 @@ const EventListScreen = () => {
           </View>
         </View>
         <Text style={styles.tag}>{item.tag}</Text>
-        <Text style={styles.mandatory}>Priority: {item.isMandatory ? 'Must Go' : 'Optional'}</Text>
+        <Text style={styles.mandatory}>Priority: {item.isMandatory ? 'Mandatory' : 'Optional'}</Text>
         <TouchableOpacity style={styles.registrationButton} onPress={() => handleRegister(item)}>
           <Text style={styles.registrationButtonText}>Check Detail</Text>
         </TouchableOpacity>
@@ -166,7 +166,7 @@ const EventListScreen = () => {
           onValueChange={(value) => setIsMandatory(value === 'true')}
           items={[
             { label: 'Optional', value: 'false' },
-            { label: 'Must Go', value: 'true' },
+            { label: 'Mandatory', value: 'true' },
           ]}
           placeholder={{ label: 'Priority', value: null }}
           style={pickerSelectStyles}

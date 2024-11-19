@@ -14,6 +14,7 @@ type TeamMember = {
   studentCode: string;
   memberRole: string;
   isLeader: boolean;
+  isDeleted:boolean;
 };
 
 type ProjectDetail = {
@@ -77,14 +78,14 @@ const ProjectDetailScreen = () => {
     if (!projectDetail || !userToken) return;
 
     if (reason.trim() === '') {
-        Alert.alert('Input Required', 'Please enter your reason for joining the team.');
-        return;
+      Alert.alert('Input Required', 'Please enter your reason for joining the team.');
+      return;
     }
     const value = await AsyncStorage.getItem('@haveTeam');
     if (value !== null) { // Value was found, parse it as needed 
       const haveTeam = JSON.parse(value);
-      if(haveTeam){
-        Alert.alert('Error', 'You have a team already');
+      if (haveTeam) {
+        Alert.alert('Error', 'You already have a team ');
         return;
       }
     }
@@ -182,12 +183,16 @@ const ProjectDetailScreen = () => {
         </View>
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Team Members:</Text>
-          {team.members.sort((a, b) => (b.isLeader ? 1 : -1) - (a.isLeader ? 1 : -1)).map((member, index) => (
-            <Text key={index} style={styles.personName}>
-              {member.studentName} - {member.studentCode} - {member.memberRole}  {member.isLeader ? '(Leader)' : ''}
-            </Text>
-          ))}
+          {team.members
+            .filter(member => !member.isDeleted)
+            .sort((a, b) => (b.isLeader ? 1 : -1) - (a.isLeader ? 1 : -1))
+            .map((member, index) => (
+              <Text key={index} style={styles.personName}>
+                {member.studentName} - {member.studentCode} - {member.memberRole} {member.isLeader ? '(Leader)' : ''}
+              </Text>
+            ))}
         </View>
+
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Member Wanted:</Text>
           <Text style={styles.personName}>{memberWanted}</Text>

@@ -176,7 +176,7 @@ const RequestListScreen = () => {
                 const joinRequests = await fetchJoinRequests(typeof teamId === 'string' ? teamId : teamId[0], token);
                 await AsyncStorage.removeItem('@requestCount');
                 await AsyncStorage.setItem('@requestCount', JSON.stringify(joinRequests.length));
-                console.log(joinRequests.length);
+                // console.log(joinRequests.length);
                 const updatedRequests = await Promise.all(
                     joinRequests.map(async (request: JoinRequest) => {
                         const studentDetails = await fetchStudentDetails(request.senderId, token);
@@ -427,6 +427,7 @@ const styles = StyleSheet.create({
         color: '#fff',
         textAlign: 'center',
         flex: 1,
+        marginTop: 30,
     },
     scrollView: {
         flexGrow: 1,
