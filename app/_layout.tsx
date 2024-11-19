@@ -4,7 +4,6 @@ import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
-
 import { useColorScheme } from '@/hooks/useColorScheme';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -31,6 +30,18 @@ export default function RootLayout() {
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="+not-found" />
+        <Stack.Screen name="Authen/LoginScreen" options={{ headerShown: false }} />
+        <Stack.Screen name="Authen/LoginStaffScreen" options={{ headerShown: false }} />
+        <Stack.Screen name="MenuScreen" options={{ headerShown: false }} />
+        <Stack.Screen name="StaffMenuScreen" options={{ headerShown: false }} />
+        <Stack.Screen name="RequestListScreen" options={{ headerShown: false }} />
+        <Stack.Screen name="MyTeamScreen" options={{ headerShown: false }} />
+        <Stack.Screen name="TimeLineScreen" options={{ headerShown: false }} />
+        <Stack.Screen name="Events/EvenListScreen" options={{ headerShown: false }} />
+        <Stack.Screen name="Events/QrScanScreen" options={{ headerShown: false }} />
+        <Stack.Screen name="Events/EventDetailScreen" options={{ headerShown: false }} />
+        <Stack.Screen name="Projects/ProjectDetailScreen" options={{ headerShown: false }} />
+        <Stack.Screen name="Projects/ProjectListScreen" options={{ headerShown: false }} />
       </Stack>
     </ThemeProvider>
   );
