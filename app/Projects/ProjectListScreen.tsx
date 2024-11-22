@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, ActivityIndicator, TouchableOpacity, Button } from 'react-native';
 import { useRouter } from 'expo-router';
 import RNPickerSelect from 'react-native-picker-select';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 type Project = {
   id: string;
   projectName: string;
@@ -34,7 +34,14 @@ const ProjectListScreen = () => {
 
   const fetchProjects = async () => {
     try {
-      const response = await fetch('http://103.185.184.35:6969/api/Projects?PageSize=50');
+        const token = await AsyncStorage.getItem('@userToken');
+        const response = await fetch('https://smnc.site/api/Projects?PageSize=50', {
+            method: 'GET',
+            headers: {
+                'accept': 'text/plain',
+              Authorization: `Bearer ${token}`,
+            }
+          });
       const data = await response.json();
       setProjects(data.data.data);
       setLoading(false);

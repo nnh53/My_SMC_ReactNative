@@ -41,7 +41,14 @@ const ProjectDetailScreen = () => {
 
   const fetchProjectDetail = async () => {
     try {
-      const response = await fetch(`http://103.185.184.35:6969/api/Projects/${projectId}`);
+      const token = await AsyncStorage.getItem('@userToken');
+      const response = await fetch(`https://smnc.site/api/Projects/${projectId}`, {
+        method: 'GET',
+        headers: {
+            'accept': 'text/plain',
+            'Authorization': `Bearer ${token}`, // Make sure 'token' is defined and holds the authorization token
+        },
+    });
       const data = await response.json();
       if (data.status) {
         setProjectDetail(data.data);
@@ -97,7 +104,7 @@ const ProjectDetailScreen = () => {
     };
 
     try {
-      const response = await fetch('http://103.185.184.35:6969/api/TeamRequest', {
+      const response = await fetch('https://smnc.site/api/TeamRequest', {
         method: 'POST',
         headers: {
           Accept: '*/*',

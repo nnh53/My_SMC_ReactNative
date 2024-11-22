@@ -4,7 +4,7 @@ import getToken from './Jwt/getToken'; // Adjust the path according to your proj
 // Fetch account data using the given account ID
 export const fetchAccountData = async (accID) => {
   try {
-    const response = await fetch(`http://103.185.184.35:6969/api/Account/${accID}`, {
+    const response = await fetch(`https://smnc.site/api/Account/${accID}`, {
       method: 'GET',
       headers: {
         'accept': '*/*',

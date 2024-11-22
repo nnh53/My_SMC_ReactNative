@@ -37,7 +37,7 @@ const EventListScreen = () => {
 
     setLoading(true);
     try {
-      const response = await axios.get('http://103.185.184.35:6969/api/Events', {
+      const response = await axios.get('https://smnc.site/api/Events', {
         params: {
           SearchTerm: searchTerm,
           IsMandatory: isMandatory !== null ? isMandatory : undefined

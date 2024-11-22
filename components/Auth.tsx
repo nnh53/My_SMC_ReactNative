@@ -40,7 +40,7 @@ export default function () {
         return;
       }
 
-      const response = await fetch(`http://103.185.184.35:6969/api/Auth/google-login?googleIdToken=${idToken}`, {
+      const response = await fetch(`https://smnc.site/api/Auth/google-login?googleIdToken=${idToken}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -67,6 +67,7 @@ export default function () {
       console.log('accesstoken:', accessToken);
       await storeToken(accessToken);
       const decodedToken = await getToken();
+      console.log('id:', decodedToken.id);
       await fetchAccountData(decodedToken.id);
       console.log('decodedToken:', decodedToken);
       setLoading(false);

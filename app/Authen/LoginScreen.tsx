@@ -29,10 +29,21 @@ const LoginScreen = () => {
           style={styles.logo}
         />
         <Text style={styles.welcome}>WELCOME BACK</Text>
-        <Auth />
         <TouchableOpacity style={styles.button} onPress={navigateToStaffLogin}>
-          <Text style={styles.buttonText}>Event Staff Login</Text>
+          <View style={styles.iconContainer}>
+            <Image
+              style={styles.icon}
+              source={require('../../assets/images/event-staff.png')} // Use the new imported image
+            />
+          </View>
+          <View style={styles.textContainer}>
+            <Text style={styles.buttonText}>Event Staff Login</Text>
+          </View>
         </TouchableOpacity>
+
+
+
+        <Auth />
       </View>
     </Animated.View>
   );
@@ -61,19 +72,49 @@ const styles = StyleSheet.create({
   googleButton: {
     marginVertical: 20,
   },
+  googleIcon: {
+    width: 24, // Adjust the size as needed
+    height: 24,
+    resizeMode: 'contain',
+  },
   button: {
-    width: '80%', // Match the width of the GoogleSigninButton
-    paddingVertical: 10,
+    width: '80%', // Match the width of the Google Sign-In button
+    height: 40, // Fixed height of the button
     backgroundColor: '#00cc00',
-    borderRadius: 5,
-    marginTop:50,
+    marginBottom: 20,
+    flexDirection: 'row', // To align icon and text horizontally
+    alignItems: 'center', // Center content vertically
+    paddingHorizontal: 10, // Add horizontal padding
+    position: 'relative',
+},
+iconContainer: {
+    height: '100%', // Full height of the button
+    width: 40, // Width of the square
+    backgroundColor: '#fff', // White background for the square
+    justifyContent: 'center',
     alignItems: 'center',
-  },
-  buttonText: {
-    fontSize: 16,
+    borderTopLeftRadius: 5, // Matching the button's border radius
+    borderBottomLeftRadius: 5, // Matching the button's border radius
+    position: 'absolute', // Position absolutely to the left
+    left: 0, // Align to the left of the button
+},
+icon: {
+    width: 24, // Adjust the size as needed
+    height: 24,
+    resizeMode: 'contain',
+},
+textContainer: {
+    flex: 1, // Take up remaining space
+    justifyContent: 'center',
+    alignItems: 'center', // Center the text horizontally and vertically
+},
+buttonText: {
+    fontSize: 15,
     color: '#fff',
-    textAlign: 'center',
-  },
+    marginLeft:50,
+    marginTop:7,
+    fontWeight: 'bold', // Make text bold
+},
 });
 
 export default LoginScreen;

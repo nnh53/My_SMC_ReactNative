@@ -1,6 +1,6 @@
 const validateToken = async (idToken) => {
     try {
-      const response = await fetch(`http://localhost:5066/api/Auth/google-login?googleIdToken=${idToken}`, {
+      const response = await fetch(`https://smnc.site/api/Auth/google-login?googleIdToken=${idToken}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -41,7 +41,10 @@ export default function RootLayout() {
         <Stack.Screen name="Events/QrScanScreen" options={{ headerShown: false }} />
         <Stack.Screen name="Events/EventDetailScreen" options={{ headerShown: false }} />
         <Stack.Screen name="Projects/ProjectDetailScreen" options={{ headerShown: false }} />
+        <Stack.Screen name="Projects/MyProjectScreen" options={{ headerShown: false }} />
         <Stack.Screen name="Projects/ProjectListScreen" options={{ headerShown: false }} />
+        {/* <Stack.Screen name="Tasks/TaskList" options={{ headerShown: false }} /> */}
+        <Stack.Screen name="Appointments/CalendarScreen" options={{ headerShown: false }} />
       </Stack>
     </ThemeProvider>
   );

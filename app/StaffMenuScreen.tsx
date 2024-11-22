@@ -34,9 +34,7 @@ const StaffMenuScreen = () => {
                 console.log('Error retrieving token: ', error);
             }
         }; retrieveToken();
-        const backAction = () => true; // Disable back button 
-        const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction); // Clean up the event listener 
-        return () => backHandler.remove();
+
     }, [slideAnim]);
     const toggleMenu = () => {
         setMenuVisible(!menuVisible);

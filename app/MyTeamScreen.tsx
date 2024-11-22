@@ -22,7 +22,7 @@ interface JoinRequest {
 
 const fetchTeamDetails = async (courseId: string, semesterId: string, userToken: string) => {
     try {
-        const response = await fetch(`http://103.185.184.35:6969/api/Teams/CurrentUserTeam?courseId=${courseId}&semesterId=${semesterId}`, {
+        const response = await fetch(`https://smnc.site/api/Teams/CurrentUserTeam?courseId=${courseId}&semesterId=${semesterId}`, {
             method: 'GET',
             headers: {
                 'accept': '*/*',
@@ -38,7 +38,7 @@ const fetchTeamDetails = async (courseId: string, semesterId: string, userToken:
 
 const deleteMember = async (member: Member, userToken: string) => {
     try {
-        const response = await fetch(`http://103.185.184.35:6969/api/TeamMembers/${member.id}`, {
+        const response = await fetch(`https://smnc.site/api/TeamMembers/${member.id}`, {
             method: 'PUT',
             headers: {
                 'accept': '*/*',
@@ -72,7 +72,7 @@ const deleteMember = async (member: Member, userToken: string) => {
 
 const assignLeader = async (member: Member, userToken: string) => {
     try {
-        const response = await fetch(`http://103.185.184.35:6969/api/TeamMembers/${member.id}`, {
+        const response = await fetch(`https://smnc.site/api/TeamMembers/${member.id}`, {
             method: 'PUT',
             headers: {
                 'accept': '*/*',
@@ -102,7 +102,7 @@ const assignLeader = async (member: Member, userToken: string) => {
 };
 const unAssignLeader = async (member: Member, userToken: string) => {
     try {
-        const response = await fetch(`http://103.185.184.35:6969/api/TeamMembers/${member.id}`, {
+        const response = await fetch(`https://smnc.site/api/TeamMembers/${member.id}`, {
             method: 'PUT',
             headers: {
                 'accept': '*/*',
@@ -133,7 +133,7 @@ const unAssignLeader = async (member: Member, userToken: string) => {
 // Function to update member role
 const updateMemberRole = async (member: Member, userToken: string) => {
     try {
-        const response = await fetch(`http://103.185.184.35:6969/api/TeamMembers/${member.id}`, {
+        const response = await fetch(`https://smnc.site/api/TeamMembers/${member.id}`, {
             method: 'PUT',
             headers: {
                 'accept': '*/*',
@@ -179,7 +179,7 @@ const MyTeamScreen = () => {
     const [selectedMember, setSelectedMember] = useState<Member | null>(null);
     const [currentstudentCode, setStudentCode] = useState<string | null>(null);
     const [editRoleMode, setEditRoleMode] = useState<boolean>(false);
-    const { courseDetails, studentCode } = useLocalSearchParams();
+    const {courseDetails, studentCode } = useLocalSearchParams();
     const [newRole, setNewRole] = useState<string>('');
     const [joinRequestsCount, setJoinRequestsCount] = useState<number>(0);
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -320,7 +320,7 @@ const MyTeamScreen = () => {
     };
     const fetchJoinRequests = async (teamId: string, token: string) => {
         try {
-            const response = await fetch(`http://103.185.184.35:6969/api/TeamRequest/search?PageSize=10&TeamId=${teamId}`, {
+            const response = await fetch(`https://smnc.site/api/TeamRequest/search?PageSize=10&TeamId=${teamId}`, {
                 method: 'GET',
                 headers: {
                     'accept': '*/*',
@@ -661,7 +661,7 @@ const styles = StyleSheet.create({
         marginTop: 20,
     },
     joinRequestsButton: {
-        backgroundColor: '#00796b',
+        backgroundColor: '#003366',
         paddingVertical: 10,
         paddingHorizontal: 20,
         borderRadius: 5,

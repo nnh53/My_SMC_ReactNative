@@ -37,7 +37,7 @@ type DetailedJoinRequest = JoinRequest & Student;
 
 const fetchStudentDetails = async (accountId: string, token: string): Promise<Student | null> => {
     try {
-        const response = await fetch(`http://103.185.184.35:6969/api/Student/GetStudentByAccId/${accountId}`, {
+        const response = await fetch(`https://smnc.site/api/Student/GetStudentByAccId/${accountId}`, {
             method: 'GET',
             headers: {
                 'accept': 'text/plain',
@@ -58,7 +58,7 @@ const fetchStudentDetails = async (accountId: string, token: string): Promise<St
 
 const fetchJoinRequests = async (teamId: string, token: string) => {
     try {
-        const response = await fetch(`http://103.185.184.35:6969/api/TeamRequest/search?PageSize=10&TeamId=${teamId}`, {
+        const response = await fetch(`https://smnc.site/api/TeamRequest/search?PageSize=10&TeamId=${teamId}`, {
             method: 'GET',
             headers: {
                 'accept': '*/*',
@@ -80,7 +80,7 @@ const fetchJoinRequests = async (teamId: string, token: string) => {
 
 const declineMember = async (requestId: string, token: string) => {
     try {
-        const response = await fetch(`http://103.185.184.35:6969/api/TeamRequest/${requestId}`, {
+        const response = await fetch(`https://smnc.site/api/TeamRequest/${requestId}`, {
             method: 'PUT',
             headers: {
                 'accept': '*/*',
@@ -107,7 +107,7 @@ const declineMember = async (requestId: string, token: string) => {
 
 const approveMember = async (request: DetailedJoinRequest, token: string, role: string) => {
     try {
-        const response1 = await fetch(`http://103.185.184.35:6969/api/TeamRequest/${request.id}`, {
+        const response1 = await fetch(`https://smnc.site/api/TeamRequest/${request.id}`, {
             method: 'PUT',
             headers: {
                 'accept': '*/*',
@@ -126,7 +126,7 @@ const approveMember = async (request: DetailedJoinRequest, token: string, role: 
             throw new Error(errorData.message || 'Failed to approve request');
         }
 
-        const response2 = await fetch('http://103.185.184.35:6969/api/TeamMembers', {
+        const response2 = await fetch('https://smnc.site/api/TeamMembers', {
             method: 'POST',
             headers: {
                 'accept': '*/*',

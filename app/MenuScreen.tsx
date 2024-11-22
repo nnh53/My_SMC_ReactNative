@@ -14,9 +14,18 @@ interface CourseInstanceDetails {
         semesterId: string;
     };
 }
-
+interface Member {
+    studentName: string;
+    studentCode: string;
+    memberRole: string;
+    isLeader: boolean;
+    isDeleted: boolean;
+    note?: string; // Assuming there's a note property in your member object
+    id: string; // Assuming there's an id property in your member object
+}
 interface TeamDetails {
     data: {
+        teamId:string,
         members: { studentCode: string; isLeader: boolean }[];
     };
 }
@@ -24,7 +33,7 @@ interface TeamDetails {
 // Function to fetch course instance details
 const fetchCourseInstanceDetails = async (courseInstanceId: string, userToken: string): Promise<CourseInstanceDetails | null> => {
     try {
-        const response = await fetch(`http://103.185.184.35:6969/api/CourseInstance/${courseInstanceId}`, {
+        const response = await fetch(`https://smnc.site/api/CourseInstance/${courseInstanceId}`, {
             method: 'GET',
             headers: {
                 'accept': '*/*',
@@ -47,7 +56,7 @@ const fetchCourseInstanceDetails = async (courseInstanceId: string, userToken: s
 // Function to fetch team details
 const fetchTeamDetails = async (courseId: string, semesterId: string, userToken: string): Promise<TeamDetails | null> => {
     try {
-        const response = await fetch(`http://103.185.184.35:6969/api/Teams/CurrentUserTeam?courseId=${courseId}&semesterId=${semesterId}`, {
+        const response = await fetch(`https://smnc.site/api/Teams/CurrentUserTeam?courseId=${courseId}&semesterId=${semesterId}`, {
             method: 'GET',
             headers: {
                 'accept': '*/*',
@@ -59,6 +68,17 @@ const fetchTeamDetails = async (courseId: string, semesterId: string, userToken:
             console.error('Error fetching team details:', data.message, data.errors);
             return null;
         }
+        const members: Member[] = data.data.members.map((member: any) => ({
+            id: member.id,
+            studentName: member.studentName,
+            studentCode: member.studentCode,
+            memberRole: member.memberRole,
+            isLeader: member.isLeader,
+            status: member.status,
+            note: member.note,
+            isDeleted: member.isDeleted,
+        }));
+
         return data;
     } catch (error) {
         console.error('Error fetching team details:', error);
@@ -77,8 +97,10 @@ const MenuScreen = () => {
     const [studentCode, setStudentCode] = useState<string | null>(null);
     const [courseInstanceId, setCourseInstanceId] = useState<string | null>(null);
     const [userToken, setUserToken] = useState<string | null>(null);
+    const [teamId, setTeamId] = useState<string | null>(null);
     const [courseDetails, setCourseDetails] = useState<{ courseId: string | null; semesterId: string | null }>({ courseId: null, semesterId: null });
     const [loading, setLoading] = useState<boolean>(true); // Loading state
+    const [memberCount, setMemberCount] = useState<number>(0);
     useEffect(() => {
         Animated.timing(slideAnim, {
             toValue: 0,
@@ -124,8 +146,14 @@ const MenuScreen = () => {
 
                                     // console.log("accData",parsedData)
                                     const teamDetails = await fetchTeamDetails(courseDetails.data.courseId, courseDetails.data.semesterId, token);
+                                    // console.log(teamDetails);
                                     if (teamDetails) {
-                                        console.log("teamDetail", teamDetails.data.members)
+                                        const members: Member[] = teamDetails.data.members as Member[];
+                                        const activeMemberCount = members.filter((member) => !member.isDeleted).length; 
+                                        setMemberCount(activeMemberCount);
+                                        setTeamId(teamDetails.data.teamId);
+                                        console.log("membercount", activeMemberCount)
+                                        // console.log("teamDetail", teamDetails.data.members)
                                         const isCurrentUserLeader = teamDetails.data.members.filter(
                                             (member: { studentCode: string; isLeader: boolean }) =>
                                                 member.studentCode === parsedData.student.studentCode && member.isLeader
@@ -155,11 +183,11 @@ const MenuScreen = () => {
 
         retrieveToken();
 
-        const backAction = () => true; // Disable back button
-        const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
+        // const backAction = () => true; // Disable back button
+        // const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
 
-        // Clean up the event listener
-        return () => backHandler.remove();
+        // // Clean up the event listener
+        // return () => backHandler.remove();
     }, [slideAnim]);
 
     const toggleMenu = () => {
@@ -201,7 +229,45 @@ const MenuScreen = () => {
             },
         });
     };
+    const handleProjectTask = () => {
+        if (!studentCode) {
+            Alert.alert("You need a team to use this function");
+            return;
+        }
     
+        router.push({
+            pathname: '../Tasks/TaskList',
+            params: {
+                courseDetails: JSON.stringify(courseDetails), // Serialize courseDetails to a string
+                studentCode: studentCode,
+            },
+        });
+    };
+    const handleMyProject= () => {
+        if (!studentCode) {
+            Alert.alert("You need a team to use this function");
+            return;
+        }
+        router.push({
+            pathname: '../Projects/MyProjectScreen',
+            params: {
+                courseId: courseDetails.courseId,
+                semesterId: courseDetails.semesterId,
+            },
+        });
+    };
+    const handleCalendar= () => {
+        if (!studentCode) {
+            Alert.alert("You need a team to use this function");
+            return;
+        }
+        router.push({
+            pathname: '../Appointments/CalendarScreen',
+            params: {
+                teamId:teamId
+            },
+        });
+    };
     if (loading) {
         return (
             <View style={styles.loadingContainer}>
@@ -259,16 +325,16 @@ const MenuScreen = () => {
                                 <Image source={require('../assets/images/team-icon.png')} style={styles.icon} />
                                 <Text style={styles.menuText}>My Team</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/TimeLineScreen')}>
-                                <Image source={require('../assets/images/google-logo.png')} style={styles.icon} />
-                                <Text style={styles.menuText}>Time Line</Text>
+                            <TouchableOpacity style={styles.menuItem} onPress={() => handleMyProject()}>
+                                <Image source={require('../assets/images/project-icon.png')} style={styles.icon} />
+                                <Text style={styles.menuText}>My Project</Text>
                             </TouchableOpacity>
                         </View>
                         <View style={styles.section}>
-                            <Text style={styles.sectionTitle}>Information Access</Text>
-                            <TouchableOpacity style={styles.menuItem} >
-                                <Image source={require('../assets/images/google-logo.png')} style={styles.icon} />
-                                <Text style={styles.menuText}>Weekly timetable</Text>
+                            <Text style={styles.sectionTitle}>Mentor Appointment</Text>
+                            <TouchableOpacity style={styles.menuItem} onPress={() => handleCalendar()} >
+                                <Image source={require('../assets/images/calender-icon.png')} style={styles.icon} />
+                                <Text style={styles.menuText}>Calendar</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={styles.menuItem} >
                                 <Image source={require('../assets/images/google-logo.png')} style={styles.icon} />
@@ -395,8 +461,8 @@ const styles = StyleSheet.create({
 
     },
     icon: {
-        width: 30,
-        height: 30,
+        width: 27,
+        height: 27,
         marginRight: 10
 
     },

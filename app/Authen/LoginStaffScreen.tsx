@@ -16,7 +16,7 @@ const LoginStaffScreen = () => {
     setErrorMessage(null); // Clear any previous error messages
 
     try {
-      const response = await fetch('http://103.185.184.35:6969/api/Auth/login', {
+      const response = await fetch('https://smnc.site/api/Auth/login', {
         method: 'POST',
         headers: {
           'Accept': '*/*',

@@ -60,7 +60,7 @@ const EventDetailScreen = () => {
     };
     const fetchStudentId = async (userId: string) => {
         try {
-            const response = await fetch(`http://103.185.184.35:6969/api/Account/${userId}`, {
+            const response = await fetch(`https://smnc.site/api/Account/${userId}`, {
                 method: 'GET',
                 headers: {
                     'accept': '*/*',
@@ -75,7 +75,7 @@ const EventDetailScreen = () => {
 
     const fetchEventDetails = async (eventId: string) => {
         try {
-            const response = await fetch(`http://103.185.184.35:6969/api/Events/${eventId}`);
+            const response = await fetch(`https://smnc.site/api/Events/${eventId}`);
             const data = await response.json();
             setEvent(data.data);
             setLoading(false);
@@ -102,7 +102,7 @@ const EventDetailScreen = () => {
                     return;
                 }
             }
-            const response = await fetch(`http://103.185.184.35:6969/api/Events/${id}/Register`, {
+            const response = await fetch(`https://smnc.site/api/Events/${id}/Register`, {
                 method: 'PATCH',
                 headers: {
                     'accept': '*/*',
@@ -124,7 +124,7 @@ const EventDetailScreen = () => {
 
     const registerAttendance = async (eventId: string, studentId: string): Promise<{ ok: boolean }> => {
         try {
-            const response = await fetch('http://103.185.184.35:6969/api/StudentAttendance', {
+            const response = await fetch('https://smnc.site/api/StudentAttendance', {
                 method: 'POST',
                 headers: {
                     'accept': '*/*',
@@ -161,7 +161,7 @@ const EventDetailScreen = () => {
 
     const generateQrCode = async (eventId: string, userId: string): Promise<{ ok: boolean }> => {
         try {
-            const response = await fetch(`http://103.185.184.35:6969/api/Events/${eventId}/GenerateQrCode?userId=${userId}`, {
+            const response = await fetch(`https://smnc.site/api/Events/${eventId}/GenerateQrCode?userId=${userId}`, {
                 method: 'GET',
                 headers: {
                     'accept': '*/*',

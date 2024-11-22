@@ -6,7 +6,7 @@ const getToken = async () => {
 
     if (token) {
       const encodedToken = encodeURIComponent(token);
-      const response = await fetch(`http://103.185.184.35:6969/api/Auth/token-decode?token=${encodedToken}`, {
+      const response = await fetch(`https://smnc.site/api/Auth/token-decode?token=${encodedToken}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
