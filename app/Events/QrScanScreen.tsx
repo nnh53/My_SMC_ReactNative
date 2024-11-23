@@ -1,19 +1,13 @@
-import { Camera, CameraView } from "expo-camera";
+import React, { useEffect, useRef, useState } from "react";
+import { CameraView } from "expo-camera";
 import { Stack } from "expo-router";
-import {
-  AppState,
-  Linking,
-  Platform,
-  SafeAreaView,
-  StatusBar,
-  StyleSheet,
-} from "react-native";
+import { AppState, Linking, Platform, SafeAreaView, StatusBar, StyleSheet, Button } from "react-native";
 import { Overlay } from "./Overlay";
-import { useEffect, useRef } from "react";
 
 export default function QrScanScreen() {
   const qrLock = useRef(false);
   const appState = useRef(AppState.currentState);
+  const [isScanning, setIsScanning] = useState(true);
 
   useEffect(() => {
     const subscription = AppState.addEventListener("change", (nextAppState) => {
@@ -22,6 +16,7 @@ export default function QrScanScreen() {
         nextAppState === "active"
       ) {
         qrLock.current = false;
+        setIsScanning(true); // Reset scanning state when app comes back to active
       }
       appState.current = nextAppState;
     });
@@ -30,6 +25,11 @@ export default function QrScanScreen() {
       subscription.remove();
     };
   }, []);
+
+  const handleScanAgain = () => {
+    qrLock.current = false;
+    setIsScanning(true);
+  };
 
   return (
     <SafeAreaView style={StyleSheet.absoluteFillObject}>
@@ -40,19 +40,23 @@ export default function QrScanScreen() {
         }}
       />
       {Platform.OS === "android" ? <StatusBar hidden /> : null}
-      <CameraView
-        style={StyleSheet.absoluteFillObject}
-        facing="back"
-        onBarcodeScanned={({ data }) => {
-          if (data && !qrLock.current) {
-            qrLock.current = true;
-            setTimeout(async () => {
-              await Linking.openURL(data);
-            }, 500);
-          }
-        }}
-      />
+      {isScanning && (
+        <CameraView
+          style={[StyleSheet.absoluteFillObject, { backgroundColor: 'rgba(0, 0, 0, 0.5)' }]} // Semi-transparent background
+          facing="back"
+          onBarcodeScanned={({ data }) => {
+            if (data && !qrLock.current) {
+              qrLock.current = true;
+              setIsScanning(false);
+              setTimeout(async () => {
+                await Linking.openURL(data);
+              }, 500);
+            }
+          }}
+        />
+      )}
       <Overlay />
+      <Button title="Scan Again" onPress={handleScanAgain} />
     </SafeAreaView>
   );
 }

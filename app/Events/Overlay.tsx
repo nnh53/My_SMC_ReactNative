@@ -31,12 +31,15 @@ const styles = StyleSheet.create({
     height: height,
     justifyContent: 'center',
     alignItems: 'center',
+    
   },
   inner: {
     width: innerDimension,
     height: innerDimension,
     borderRadius: 50,
-    backgroundColor: 'white',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Add semi-transparent background to outer overlay
+    borderWidth: 2,
+    borderColor: 'white', // Add a border to distinguish it
   },
 });
 
