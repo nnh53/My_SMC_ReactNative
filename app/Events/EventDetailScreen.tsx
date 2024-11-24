@@ -96,7 +96,7 @@ const EventDetailScreen = () => {
                 return;
             }
             if (event?.isMandatory) {
-                const qrCodeResponse=await generateQrCode(id.toString(), userId);
+                const qrCodeResponse=await generateQrCode(id.toString(), userId,studentId);
                 if (!qrCodeResponse.ok) {
                     // If there is an error in registering attendance, stop further execution
                     return;
@@ -159,9 +159,9 @@ const EventDetailScreen = () => {
     
     
 
-    const generateQrCode = async (eventId: string, userId: string): Promise<{ ok: boolean }> => {
+    const generateQrCode = async (eventId: string, userId: string,studentId: string): Promise<{ ok: boolean }> => {
         try {
-            const response = await fetch(`https://smnc.site/api/Events/${eventId}/GenerateQrCode?userId=${userId}`, {
+            const response = await fetch(`https://smnc.site/api/Events/${eventId}/GenerateQrCode?studentId=${studentId}&accountId=${userId}`, {
                 method: 'GET',
                 headers: {
                     'accept': '*/*',

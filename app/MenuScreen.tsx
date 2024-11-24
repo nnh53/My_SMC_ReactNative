@@ -183,11 +183,11 @@ const MenuScreen = () => {
 
         retrieveToken();
 
-        // const backAction = () => true; // Disable back button
-        // const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
+         const backAction = () => true; // Disable back button
+         const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
 
-        // // Clean up the event listener
-        // return () => backHandler.remove();
+        // Clean up the event listener
+        return () => backHandler.remove();
     }, [slideAnim]);
 
     const toggleMenu = () => {

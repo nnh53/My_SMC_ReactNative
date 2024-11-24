@@ -14,7 +14,7 @@ type TeamMember = {
   studentCode: string;
   memberRole: string;
   isLeader: boolean;
-  isDeleted:boolean;
+  isDeleted: boolean;
 };
 
 type ProjectDetail = {
@@ -45,10 +45,10 @@ const ProjectDetailScreen = () => {
       const response = await fetch(`https://smnc.site/api/Projects/${projectId}`, {
         method: 'GET',
         headers: {
-            'accept': 'text/plain',
-            'Authorization': `Bearer ${token}`, // Make sure 'token' is defined and holds the authorization token
+          'accept': 'text/plain',
+          'Authorization': `Bearer ${token}`, // Make sure 'token' is defined and holds the authorization token
         },
-    });
+      });
       const data = await response.json();
       if (data.status) {
         setProjectDetail(data.data);
