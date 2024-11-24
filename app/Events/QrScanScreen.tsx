@@ -57,7 +57,7 @@ export default function QrScanScreen() {
           Alert.alert("Error", "An error occurred while updating attendance.", [{ text: "OK", onPress: () => handleScanAgain() }]);
         }
       } else {
-        Alert.alert("Invalid QR Code", "The scanned QR code does not contain valid ID and Student ID.");
+        Alert.alert("Invalid QR Code", "The scanned QR code does not contain valid Event ID and Student ID.", [{ text: "OK", onPress: () => handleScanAgain() }]);
       }
     }
   };
@@ -78,7 +78,6 @@ export default function QrScanScreen() {
           onBarcodeScanned={handleBarCodeScanned}
         />
       )}
-      <Overlay onScanAgain={handleScanAgain} />
     </SafeAreaView>
   );
 }
