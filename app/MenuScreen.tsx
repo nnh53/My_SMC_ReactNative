@@ -26,7 +26,7 @@ interface Member {
 interface TeamDetails {
     data: {
         teamId:string,
-        members: { studentCode: string; isLeader: boolean }[];
+        members: { id:string,studentCode: string; isLeader: boolean }[];
     };
 }
 
@@ -158,9 +158,14 @@ const MenuScreen = () => {
                                             (member: { studentCode: string; isLeader: boolean }) =>
                                                 member.studentCode === parsedData.student.studentCode && member.isLeader
                                         ).length > 0;
+                                        const member = teamDetails.data.members.find(member => member.studentCode === parsedData.student.studentCode);
+                                        const memberid=member?.id;
                                         // console.log("isLeader:",isCurrentUserLeader);
                                         setStudentCode(parsedData.student.studentCode);
+                                        console.log("code:",parsedData.student.studentCode);
                                         await AsyncStorage.setItem('@isLeader', JSON.stringify(isCurrentUserLeader));
+                                        await AsyncStorage.setItem('@memberid', JSON.stringify(memberid));
+                                        
                                         await AsyncStorage.setItem('@haveTeam', JSON.stringify(true));
                                     }else{
                                         await AsyncStorage.setItem('@haveTeam', JSON.stringify(false));
@@ -236,10 +241,10 @@ const MenuScreen = () => {
         }
     
         router.push({
-            pathname: '../Tasks/TaskList',
+            pathname: '../Tasks/MilestoneScreen',
             params: {
-                courseDetails: JSON.stringify(courseDetails), // Serialize courseDetails to a string
-                studentCode: studentCode,
+                courseId: courseDetails.courseId,
+                semesterId: courseDetails.semesterId,
             },
         });
     };
@@ -309,10 +314,10 @@ const MenuScreen = () => {
                                 <Image source={require('../assets/images/newsfeed-icon.png')} style={styles.icon} />
                                 <Text style={styles.menuText}>New Feeds</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={styles.menuItem} >
+                            {/* <TouchableOpacity style={styles.menuItem} >
                                 <Image source={require('../assets/images/google-logo.png')} style={styles.icon} />
                                 <Text style={styles.menuText}>Application status</Text>
-                            </TouchableOpacity>
+                            </TouchableOpacity> */}
                         </View>
                         <View style={styles.section}>
                             <Text style={styles.sectionTitle}>Project</Text>
@@ -329,6 +334,10 @@ const MenuScreen = () => {
                                 <Image source={require('../assets/images/project-icon.png')} style={styles.icon} />
                                 <Text style={styles.menuText}>My Project</Text>
                             </TouchableOpacity>
+                            <TouchableOpacity style={styles.menuItem} onPress={() => handleProjectTask()}>
+                                <Image source={require('../assets/images/task-icon.png')} style={styles.icon} />
+                                <Text style={styles.menuText}>Project Tasks</Text>
+                            </TouchableOpacity>
                         </View>
                         <View style={styles.section}>
                             <Text style={styles.sectionTitle}>Mentor Appointment</Text>
@@ -336,17 +345,17 @@ const MenuScreen = () => {
                                 <Image source={require('../assets/images/calender-icon.png')} style={styles.icon} />
                                 <Text style={styles.menuText}>Calendar</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={styles.menuItem} >
+                            {/* <TouchableOpacity style={styles.menuItem} >
                                 <Image source={require('../assets/images/google-logo.png')} style={styles.icon} />
                                 <Text style={styles.menuText}>Exam schedule</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={styles.menuItem} >
                                 <Image source={require('../assets/images/google-logo.png')} style={styles.icon} />
                                 <Text style={styles.menuText}>Semester Schedule</Text>
-                            </TouchableOpacity>
+                            </TouchableOpacity> */}
                         </View>
                     </ScrollView>
-                    <View style={styles.footer}>
+                    {/* <View style={styles.footer}>
                         <TouchableOpacity style={styles.footerItem} >
                             <Image source={require('../assets/images/google-logo.png')} style={styles.footerIcon} />
                         </TouchableOpacity>
@@ -356,7 +365,7 @@ const MenuScreen = () => {
                         <TouchableOpacity style={styles.footerItem} >
                             <Image source={require('../assets/images/google-logo.png')} style={styles.footerIcon} />
                         </TouchableOpacity>
-                    </View>
+                    </View> */}
                 </Animated.View>
             </View>
         </SafeAreaView>
@@ -461,8 +470,8 @@ const styles = StyleSheet.create({
 
     },
     icon: {
-        width: 27,
-        height: 27,
+        width: 35,
+        height: 35,
         marginRight: 10
 
     },

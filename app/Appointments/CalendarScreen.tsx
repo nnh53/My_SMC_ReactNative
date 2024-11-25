@@ -168,7 +168,7 @@ const CalendarScreen = () => {
     }, []);
 
     useEffect(() => {
-        // console.log("Selected Day: ", selectedDay); // Debugging purpose to check selectedDay state
+        console.log("Selected Day: ", selectedDay); // Debugging purpose to check selectedDay state
     }, [selectedDay]);
 
     return (

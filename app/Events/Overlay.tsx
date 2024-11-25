@@ -1,11 +1,15 @@
 import React from 'react';
-import { View, Dimensions, StyleSheet, Platform, Button } from 'react-native';
+import { View, Dimensions, StyleSheet, Button } from 'react-native';
 
 const { width, height } = Dimensions.get("window");
 
 const innerDimension = 300;
 
-export const Overlay = ({ onScanAgain }) => {
+interface OverlayProps {
+  onScanAgain: () => void;
+}
+
+export const Overlay: React.FC<OverlayProps> = ({ onScanAgain }) => {
   return (
     <View style={styles.container}>
       <View style={styles.outer}> 
