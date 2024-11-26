@@ -20,7 +20,11 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.huyngo0303.SMC_MobileApp"
+      "package": "com.huyngo0303.SMC_MobileApp",
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "web": {
       "bundler": "metro",
@@ -47,7 +51,7 @@
         "origin": false
       },
       "eas": {
-        "projectId": "2a0063d2-da43-459c-b4b7-567f9704a073"
+        "projectId": "c69c3ee7-2eac-4078-92ed-072c676ebc94"
       }
     }
   }
