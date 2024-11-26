@@ -18,3 +18,7 @@ web-build/
 
 expo-env.d.ts
 # @end expo-cli
+
+# đúng ra phải ignore but fuckit 
+# android/gradle.properties
+# android/app/my-upload-key.keystore
